@@ -367,7 +367,9 @@ class interfaceController extends baseController {
               let new_res_body = yapi.commons.json_parse(params.res_body)
               let old_res_body = yapi.commons.json_parse(item.res_body)
               data.params.res_body = JSON.stringify(mergeJsonSchema(old_res_body, new_res_body),null,2);
-            }catch(err){}
+            }catch(err){
+              console.log(err)
+            }
           }
           await this.up(data);
         } else {
@@ -565,9 +567,8 @@ class interfaceController extends baseController {
    * **/
   async rapJson(ctx) {
     let id = ctx.request.url.split('?')[1].split('=')[1]
-    
     let result
-    await axios.get('http://192.168.4.102:9999/api/queryRAPModel.do?projectId='+id).then(res => {
+    await axios.get(yapi.WEBCONFIG.rapOrigin+'/api/queryRAPModel.do?projectId='+id).then(res => {
       let modelJSON = res.data.modelJSON.replace(/'/g,'"')
       result = JSON.parse(modelJSON)
       console.log(result)
@@ -1104,7 +1105,7 @@ class interfaceController extends baseController {
       params.forEach(item => {
         if (item.id) {
           this.Model.upIndex(item.id, item.index).then(
-            res => {},
+            () => {},
             err => {
               yapi.commons.log(err.message, 'error');
             }
@@ -1138,7 +1139,7 @@ class interfaceController extends baseController {
       params.forEach(item => {
         if (item.id) {
           this.catModel.upCatIndex(item.id, item.index).then(
-            res => {},
+            () => {},
             err => {
               yapi.commons.log(err.message, 'error');
             }

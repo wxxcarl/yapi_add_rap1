@@ -30,7 +30,7 @@ function websocket(app) {
 
   app.ws.use(router.routes())
   app.ws.use(router.allowedMethods());
-  app.ws.use(function (ctx, next) {
+  app.ws.use(function (ctx) {
     return ctx.websocket.send(JSON.stringify({
       errcode: 404,
       errmsg: 'No Fount.'

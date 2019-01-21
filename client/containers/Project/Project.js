@@ -83,7 +83,7 @@ export default class Project extends Component {
       data: { name: '数据管理', path: '/project/:id/data', component: ProjectData },
       members: { name: '成员管理', path: '/project/:id/members', component: ProjectMember },
       setting: { name: '设置', path: '/project/:id/setting', component: Setting },
-      importFromRap: { name: 'RAP导入', path: '/project/:id/importFromRap', component: ImportFromRap }
+      importFromRap: { name: 'RAP项目导入', path: '/project/:id/importFromRap', component: ImportFromRap }
     };
 
     plugin.emitHook('sub_nav', routers);

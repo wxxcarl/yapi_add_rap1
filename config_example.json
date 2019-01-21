@@ -1,6 +1,7 @@
 {
   "port": "3000",
   "adminAccount": "admin@admin.com",
+  "rapOrigin": "http://192.168.4.102:9999",
   "db": {
     "servername": "127.0.0.1",
     "DATABASE": "yapi",
