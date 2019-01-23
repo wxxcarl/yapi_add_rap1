@@ -500,7 +500,7 @@ class InterfaceMenu extends Component {
                       e.stopPropagation();
                       this.copyInterface(item._id);
                     }}
-                    style={{ display: this.state.delIcon == item._id ? 'block' : 'none' }}
+                    style={{ display: this.state.delIcon == item._id && editEable ? 'block' : 'none' }}
                   />
                 </Tooltip>
               </div>

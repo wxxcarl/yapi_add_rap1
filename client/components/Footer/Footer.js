@@ -18,12 +18,13 @@ class Footer extends Component {
         <Row className="footer-container">
           {this.props.footList.map(function(item, i) {
             return (
-              <FootItem
-                key={i}
-                linkList={item.linkList}
-                title={item.title}
-                iconType={item.iconType}
-              />
+              // <FootItem
+              //   key={i}
+              //   linkList={item.linkList}
+              //   title={item.title}
+              //   iconType={item.iconType}
+              // />
+              ''
             );
           })}
         </Row>

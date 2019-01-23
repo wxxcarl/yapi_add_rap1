@@ -70,14 +70,14 @@ em {
 }
 // 页面最外层元素 样式
 .router-main {
-  padding-bottom: .24rem;
+  // padding-bottom: .24rem;
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin-bottom: -2.4rem;
+  // margin-bottom: -2.4rem;
   background-color: #eceef1;
   &::after {
-    content: '';
+    content: none;
     display: block;
     height: 2.4rem;
   }
