@@ -522,11 +522,11 @@ class projectController extends baseController {
     if (!result) {
       return (ctx.body = yapi.commons.resReturn(null, 400, '不存在的项目'));
     }
-    if (result.project_type === 'private') {
-      if ((await this.checkAuth(result._id, 'project', 'view')) !== true) {
-        return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
-      }
-    }
+    // if (result.project_type === 'private') {
+    //   if ((await this.checkAuth(result._id, 'project', 'view')) !== true) {
+    //     return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
+    //   }
+    // }
     result = result.toObject();
     let catInst = yapi.getInst(interfaceCatModel);
     let cat = await catInst.list(params.id);
@@ -560,18 +560,19 @@ class projectController extends baseController {
     if (groupData.type === 'private' && this.getUid() === groupData.uid) {
       isPrivateGroup = true;
     }
-    let auth = await this.checkAuth(group_id, 'group', 'view');
+    // let auth = await this.checkAuth(group_id, 'group', 'view');
     let result = await this.Model.list(group_id);
     let follow = await this.followModel.list(this.getUid());
     if (isPrivateGroup === false) {
-      for (let index = 0, item, r = 1; index < result.length; index++) {
+      // for (let index = 0, item, r=1; index < result.length; index++) {
+        for (let index = 0, item; index < result.length; index++) {
         item = result[index].toObject();
-        if (item.project_type === 'private' && auth === false) {
-          r = await this.Model.checkMemberRepeat(item._id, this.getUid());
-          if (r === 0) {
-            continue;
-          }
-        }
+        // if (item.project_type === 'private' && auth === false) {
+        //   r = await this.Model.checkMemberRepeat(item._id, this.getUid());
+        //   if (r === 0) {
+        //     continue;
+        //   }
+        // }
 
         let f = _.find(follow, fol => {
           return fol.projectid === item._id;

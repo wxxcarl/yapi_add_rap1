@@ -46,7 +46,8 @@ InterfaceRoute.propTypes = {
 @connect(
   state => {
     return {
-      isShowCol: state.interfaceCol.isShowCol
+      isShowCol: state.interfaceCol.isShowCol,
+      curProject: state.project.currProject
     };
   },
   {
@@ -60,6 +61,7 @@ class Interface extends Component {
     history: PropTypes.object,
     location: PropTypes.object,
     isShowCol: PropTypes.bool,
+    curProject: PropTypes.object,
     getProject: PropTypes.func,
     setColData: PropTypes.func
     // fetchInterfaceColList: PropTypes.func
@@ -89,14 +91,23 @@ class Interface extends Component {
     const { action } = this.props.match.params;
     // const activeKey = this.state.curkey;
     const activeKey = action === 'api' ? 'api' : 'colOrCase';
-
+    const editEable =
+      this.props.curProject.role === 'admin' ||
+      this.props.curProject.role === 'owner' ||
+      this.props.curProject.role === 'dev';
     return (
       <Layout style={{ minHeight: 'calc(100vh - 156px)', marginLeft: '24px', marginTop: '24px' }}>
         <Sider style={{ height: '100%' }} width={300}>
           <div className="left-menu">
             <Tabs type="card" className="tabs-large" activeKey={activeKey} onChange={this.onChange}>
               <Tabs.TabPane tab="接口列表" key="api" />
-              <Tabs.TabPane tab="测试集合" key="colOrCase" />
+              {editEable ? (
+                <Tabs.TabPane tab="测试集合" key="colOrCase" />
+              ):(
+                <Tabs.TabPane disabled tab="测试集合" key="colOrCase" />
+              )
+              }
+              
             </Tabs>
             {activeKey === 'api' ? (
               <InterfaceMenu

@@ -413,12 +413,12 @@ class interfaceController extends baseController {
         return (ctx.body = yapi.commons.resReturn(null, 490, '不存在的'));
       }
       let userinfo = await this.userModel.findById(result.uid);
-      let project = await this.projectModel.getBaseInfo(result.project_id);
-      if (project.project_type === 'private') {
-        if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
-          return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
-        }
-      }
+      // let project = await this.projectModel.getBaseInfo(result.project_id);
+      // if (project.project_type === 'private') {
+      //   if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
+      //     return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
+      //   }
+      // }
       yapi.emitHook('interface_get', result).then();
       result = result.toObject();
       if (userinfo) {
@@ -450,11 +450,11 @@ class interfaceController extends baseController {
     if (!project) {
       return (ctx.body = yapi.commons.resReturn(null, 407, '不存在的项目'));
     }
-    if (project.project_type === 'private') {
-      if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
-        return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
-      }
-    }
+    // if (project.project_type === 'private') {
+    //   if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
+    //     return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
+    //   }
+    // }
     if (!project_id) {
       return (ctx.body = yapi.commons.resReturn(null, 400, '项目id不能为空'));
     }
@@ -499,14 +499,14 @@ class interfaceController extends baseController {
       return (ctx.body = yapi.commons.resReturn(null, 400, 'catid不能为空'));
     }
     try {
-      let catdata = await this.catModel.get(catid);
+      // let catdata = await this.catModel.get(catid);
 
-      let project = await this.projectModel.getBaseInfo(catdata.project_id);
-      if (project.project_type === 'private') {
-        if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
-          return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
-        }
-      }
+      // let project = await this.projectModel.getBaseInfo(catdata.project_id);
+      // if (project.project_type === 'private') {
+      //   if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
+      //     return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
+      //   }
+      // }
 
       let result = await this.Model.listByCatidWithPage(catid, page, limit);
 
@@ -532,11 +532,11 @@ class interfaceController extends baseController {
     if (!project) {
       return (ctx.body = yapi.commons.resReturn(null, 406, '不存在的项目'));
     }
-    if (project.project_type === 'private') {
-      if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
-        return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
-      }
-    }
+    // if (project.project_type === 'private') {
+    //   if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
+    //     return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
+    //   }
+    // }
 
     try {
       let result = await this.catModel.list(project_id),
@@ -566,9 +566,19 @@ class interfaceController extends baseController {
    * @returns {Object}
    * **/
   async rapJson(ctx) {
-    let id = ctx.request.url.split('?')[1].split('=')[1]
+    // let id = ctx.request.url.split('?')[1].split('=')[1]
+    let project_id = ctx.request.query.project_id;
+    if (!project_id) {
+      return (ctx.body = yapi.commons.resReturn(null, 400, '项目id不能为空'));
+    }
     let result
-    await axios.get(yapi.WEBCONFIG.rapOrigin+'/api/queryRAPModel.do?projectId='+id).then(res => {
+    let project = await this.projectModel.getBaseInfo(project_id);
+    if (project.project_type === 'private') {
+      if ((await this.checkAuth(project._id, 'project', 'view')) !== true) {
+        return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
+      }
+    }
+    await axios.get(yapi.WEBCONFIG.rapOrigin+'/api/queryRAPModel.do?projectId='+project_id).then(res => {
       let modelJSON = res.data.modelJSON.replace(/'/g,'"')
       result = JSON.parse(modelJSON)
       console.log(result)

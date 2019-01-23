@@ -118,22 +118,34 @@ export default class Project extends Component {
     // }];
 
     let subnavData = [];
-    Object.keys(routers).forEach(key => {
-      let item = routers[key];
-      let value = {};
-      if (key === 'interface') {
-        value = {
-          name: item.name,
-          path: `/project/${match.params.id}/interface/api`
-        };
-      } else {
-        value = {
-          name: item.name,
-          path: item.path.replace(/\:id/gi, match.params.id)
-        };
-      }
-      subnavData.push(value);
-    });
+    const subnavEable =
+      this.props.curProject.role === 'admin' ||
+      this.props.curProject.role === 'owner' ||
+      this.props.curProject.role === 'dev';
+    if(subnavEable){
+      Object.keys(routers).forEach(key => {
+        let item = routers[key];
+        let value = {};
+        if (key === 'interface') {
+          value = {
+            name: item.name,
+            path: `/project/${match.params.id}/interface/api`
+          };
+        } else {
+          value = {
+            name: item.name,
+            path: item.path.replace(/\:id/gi, match.params.id)
+          };
+        }
+        subnavData.push(value);
+      });
+    } else {
+      subnavData.push({
+        name: routers['interface'].name,
+        path: `/project/${match.params.id}/interface/api`
+      });
+    }
+    
 
     if (this.props.currGroup.type === 'private') {
       subnavData = subnavData.filter(item => {

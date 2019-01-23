@@ -344,6 +344,10 @@ class InterfaceList extends Component {
       current: this.state.current,
       onChange: this.changePage
     };
+    const editEable =
+      this.props.curProject.role === 'admin' ||
+      this.props.curProject.role === 'owner' ||
+      this.props.curProject.role === 'dev';
 
     const isDisabled = this.props.catList.length === 0;
 
@@ -356,7 +360,7 @@ class InterfaceList extends Component {
         </h2>
 
         <Button
-          style={{ float: 'right' }}
+          style={{ float: 'right', display: editEable ? 'block' : 'none' }}
           disabled={isDisabled}
           type="primary"
           onClick={() => this.setState({ visible: true })}

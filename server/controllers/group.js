@@ -390,7 +390,7 @@ class groupController extends baseController {
    */
   async list(ctx) {
     var groupInst = yapi.getInst(groupModel);
-    let projectInst = yapi.getInst(projectModel);
+    // let projectInst = yapi.getInst(projectModel);
     let result = await groupInst.list();
 
     let privateGroup = await groupInst.getByPrivateUid(this.getUid());
@@ -410,22 +410,23 @@ class groupController extends baseController {
       for (let i = 0; i < result.length; i++) {
         result[i] = result[i].toObject();
         result[i].role = await this.getProjectRole(result[i]._id, 'group');
-        if (result[i].role !== 'member') {
-          newResult.unshift(result[i]);
-        } else {
-          let publicCount = await projectInst.countWithPublic(result[i]._id);
-          if (publicCount > 0) {
-            newResult.push(result[i]);
-          } else {
-            let projectCountWithAuth = await projectInst.getProjectWithAuth(
-              result[i]._id,
-              this.getUid()
-            );
-            if (projectCountWithAuth > 0) {
-              newResult.push(result[i]);
-            }
-          }
-        }
+        newResult.unshift(result[i]);
+        // if (result[i].role !== 'member') {
+        //   newResult.unshift(result[i]);
+        // } else {
+        //   let publicCount = await projectInst.countWithPublic(result[i]._id);
+        //   if (publicCount > 0) {
+        //     newResult.push(result[i]);
+        //   } else {
+        //     let projectCountWithAuth = await projectInst.getProjectWithAuth(
+        //       result[i]._id,
+        //       this.getUid()
+        //     );
+        //     if (projectCountWithAuth > 0) {
+        //       newResult.push(result[i]);
+        //     }
+        //   }
+        // }
       }
     }
     if (privateGroup) {

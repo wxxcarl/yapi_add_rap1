@@ -363,6 +363,10 @@ class InterfaceMenu extends Component {
 
   render() {
     const matchParams = this.props.match.params;
+    const editEable =
+      this.props.curProject.role === 'admin' ||
+      this.props.curProject.role === 'owner' ||
+      this.props.curProject.role === 'dev';
     // let menuList = this.state.list;
     const searchBox = (
       <div className="interface-filter">
@@ -371,10 +375,11 @@ class InterfaceMenu extends Component {
           type="primary"
           onClick={() => this.changeModal('add_cat_modal_visible', true)}
           className="btn-filter"
+          style={{ display: editEable ? 'block' : 'none' }}
         >
           添加分类
         </Button>
-        {this.state.visible ? (
+        {this.state.visible && editEable ? (
           <Modal
             title="添加接口"
             visible={this.state.visible}
@@ -484,7 +489,7 @@ class InterfaceMenu extends Component {
                       e.stopPropagation();
                       this.showConfirm(item);
                     }}
-                    style={{ display: this.state.delIcon == item._id ? 'block' : 'none' }}
+                    style={{ display: this.state.delIcon == item._id && editEable ? 'block' : 'none' }}
                   />
                 </Tooltip>
                 <Tooltip title="复制接口">
@@ -583,14 +588,14 @@ class InterfaceMenu extends Component {
                                 e.stopPropagation();
                                 this.showDelCatConfirm(item._id);
                               }}
-                              style={{ display: this.state.delIcon == item._id ? 'block' : 'none' }}
+                              style={{ display: this.state.delIcon == item._id && editEable ? 'block' : 'none' }}
                             />
                           </Tooltip>
                           <Tooltip title="修改分类">
                             <Icon
                               type="edit"
                               className="interface-delete-icon"
-                              style={{ display: this.state.delIcon == item._id ? 'block' : 'none' }}
+                              style={{ display: this.state.delIcon == item._id && editEable ? 'block' : 'none' }}
                               onClick={e => {
                                 e.stopPropagation();
                                 this.changeModal('change_cat_modal_visible', true);
@@ -604,7 +609,7 @@ class InterfaceMenu extends Component {
                             <Icon
                               type="plus"
                               className="interface-delete-icon"
-                              style={{ display: this.state.delIcon == item._id ? 'block' : 'none' }}
+                              style={{ display: this.state.delIcon == item._id && editEable ? 'block' : 'none' }}
                               onClick={e => {
                                 e.stopPropagation();
                                 this.changeModal('visible', true);

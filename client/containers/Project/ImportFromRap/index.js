@@ -198,14 +198,15 @@ class Activity extends Component {
     r.payload.data.data.forEach(e=>{
       folderList.push(e.name)
     })
+    let project_id = this.props.match.params.id
 
     // console.log(r)
-    const res = await axios.get('/api/interface/rap_json?id='+id)
+    const res = await axios.get('/api/interface/rap_json?id='+id+'&project_id='+project_id)
     if(res.data.errcode === 0){
       message.success(`远程获取RAP数据成功`);
       console.log('rap数据=>', res.data.data)
     } else {
-      message.error(res.data.errmsg+'[请检查projectID是否存在]')
+      message.error(res.data.errmsg||'[请检查projectID是否存在]')
       return false
     }
  
@@ -214,11 +215,16 @@ class Activity extends Component {
       axios.post('/api/interface/add_cat', {
         desc: moduleName,
         name: moduleName,
-        project_id: this.props.match.params.id
+        project_id
       }).then(res2 => {
-        message.success(`新增接口分类[${moduleName}]成功`);
-        let catid = res2.data.data._id
-        this.addInterface(e.pageList, catid)
+        if(res2.data.errcode === 0){
+          message.success(`新增接口分类[${moduleName}]成功`);
+          let catid = res2.data.data._id
+          this.addInterface(e.pageList, catid)
+        } else {
+          message.error(res2.data.errmsg)
+        }
+        
       })
       
     })

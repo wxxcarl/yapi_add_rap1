@@ -16,7 +16,8 @@ const TabPane = Tabs.TabPane;
     return {
       curdata: state.inter.curdata,
       list: state.inter.list,
-      editStatus: state.inter.editStatus
+      editStatus: state.inter.editStatus,
+      curProject: state.project.currProject
     };
   },
   {
@@ -30,6 +31,7 @@ class Content extends Component {
     curdata: PropTypes.object,
     fetchInterfaceData: PropTypes.func,
     history: PropTypes.object,
+    curProject: PropTypes.object,
     editStatus: PropTypes.bool
   };
   constructor(props) {
@@ -106,6 +108,10 @@ class Content extends Component {
     });
   };
   render() {
+    const editEable =
+      this.props.curProject.role === 'admin' ||
+      this.props.curProject.role === 'owner' ||
+      this.props.curProject.role === 'dev';
     if (this.props.curdata.title) {
       document.getElementsByTagName('title')[0].innerText =
         this.props.curdata.title + '-' + this.title;
@@ -135,7 +141,7 @@ class Content extends Component {
         activeKey={this.state.curtab}
         defaultActiveKey="view"
       >
-        {Object.keys(InterfaceTabs).map(key => {
+        {editEable && Object.keys(InterfaceTabs).map(key => {
           let item = InterfaceTabs[key];
           return <TabPane tab={item.name} key={key} />;
         })}
