@@ -20,6 +20,7 @@ const changeHeight = {
 @connect(
   state => {
     return {
+      login: state.user.isLogin,
       loginData: state.user,
       isLDAP: state.user.isLDAP
     };
@@ -38,8 +39,15 @@ class Login extends Component {
     };
   }
 
+  UNSAFE_componentWillMount() {
+    if (this.props.login) {
+      this.props.history.push('/group/261');
+    }
+  }
+
   static propTypes = {
     form: PropTypes.object,
+    login: PropTypes.bool,
     history: PropTypes.object,
     loginActions: PropTypes.func,
     loginLdapActions: PropTypes.func,
