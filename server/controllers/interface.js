@@ -568,6 +568,7 @@ class interfaceController extends baseController {
   async rapJson(ctx) {
     // let id = ctx.request.url.split('?')[1].split('=')[1]
     let project_id = ctx.request.query.project_id;
+    let rap_project_id = ctx.request.query.id;
     if (!project_id) {
       return (ctx.body = yapi.commons.resReturn(null, 400, '项目id不能为空'));
     }
@@ -578,7 +579,7 @@ class interfaceController extends baseController {
         return (ctx.body = yapi.commons.resReturn(null, 406, '没有权限'));
       }
     }
-    await axios.get(yapi.WEBCONFIG.rapOrigin+'/api/queryRAPModel.do?projectId='+project_id).then(res => {
+    await axios.get(yapi.WEBCONFIG.rapOrigin+'/api/queryRAPModel.do?projectId='+rap_project_id).then(res => {
       let modelJSON = res.data.modelJSON.replace(/'/g,'"')
       result = JSON.parse(modelJSON)
       console.log(result)
