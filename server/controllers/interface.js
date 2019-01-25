@@ -569,8 +569,8 @@ class interfaceController extends baseController {
     // let id = ctx.request.url.split('?')[1].split('=')[1]
     let project_id = ctx.request.query.project_id;
     let rap_project_id = ctx.request.query.id;
-    if (!project_id) {
-      return (ctx.body = yapi.commons.resReturn(null, 400, '项目id不能为空'));
+    if (!project_id || !/^\d+$/g.test(rap_project_id)) {
+      return (ctx.body = yapi.commons.resReturn(null, 400, '请填写正确的项目id'));
     }
     let result
     let project = await this.projectModel.getBaseInfo(project_id);
