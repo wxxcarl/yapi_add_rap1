@@ -566,7 +566,6 @@ class interfaceController extends baseController {
    * @returns {Object}
    * **/
   async rapJson(ctx) {
-    // let id = ctx.request.url.split('?')[1].split('=')[1]
     let project_id = ctx.request.query.project_id;
     let rap_project_id = ctx.request.query.id;
     if (!project_id || !/^\d+$/g.test(rap_project_id)) {

@@ -309,12 +309,12 @@ class ProjectData extends Component {
     key.forEach(rp => {
       let identifier =rp.identifier.split('|')[0]
       res_body.required.push(identifier)
-      let len = rp.identifier.split('|')[1]
+      let decorate = rp.identifier.split('|')[1]
       // rp.dataType.match(/array<(.*)>/
       if(rp.dataType.match(/array<(.*)>/)) {
         let type = rp.dataType.match(/array<(.*)>/)[1]
         if(type == 'object'){
-          len = len || '1'
+          let len = decorate || '1'
           res_body.properties[identifier]={
             items: this.formatDeep(rp.parameterList),
             maxItems: len.split('-')[0],
@@ -322,11 +322,15 @@ class ProjectData extends Component {
             type: "array"
           }
         } else {
-          let arr = rp.remark ? JSON.parse(rp.remark.replace('@mock=','')) : rp.remark.indexOf('$order') > -1 ? rp.remark.split('$order')[1].replace(/[()\'\"]/g,'').split(',') : []
+          let arr = []
+          if(rp.remark){
+            let mocksr = JSON.parse(rp.remark.replace('@mock=',''))
+            arr = mocksr.indexOf('$order') > -1 ? mocksr.split('$order')[1].replace(/[()\'\"]/g,'').split(',') : []
+          }
           res_body.properties[identifier]={
             items: {
               mock:{
-                mock: type=='number' ? '@integer' : ('@'+type)
+                mock: type=='number' ? '@integer(1, 999999)' : ('@'+type)
               },
               type
             },
@@ -339,12 +343,24 @@ class ProjectData extends Component {
       } else {
         let mock = rp.remark ? rp.remark.replace('@mock=','').replace(/[\'\"]/g,'') : ''
         let arr = mock && mock.indexOf('$order') > -1 ? mock.split('$order')[1].replace(/[()\'\"]/g,'').split(',') : []
-
+        let len = decorate && decorate.indexOf('+') < 0 && decorate.indexOf('.') < 0 ? decorate : 0
+        let rule
+        if(rp.dataType=='number'){
+          if(decorate && decorate.indexOf('+') > -1) {
+            rule = `@increment(${decorate.replace('+','')})`
+          } else if(decorate && decorate.indexOf('.') > -1) {
+            rule = '@float(1, 99999, 1, 10)'
+          } else{
+            rule = mock ? mock : '@integer(1, 999999)'
+          }
+        } else {
+          rule = mock
+        }
+        
         let ps = {
           description: rp.name,
-          mock: mock ? {
-            mock
-          } : undefined,
+          mock: rule ? { mock: rule } : undefined,
+          default: arr.length === 0 ? mock : undefined,
           type: rp.dataType,
           minLength: len ? len.split('-')[0] : undefined,
           maxLength: len ? (len.split('-')[1] ? len.split('-')[1] : len.split('-')[0]) : undefined
@@ -382,9 +398,6 @@ class ProjectData extends Component {
               message.error(`插入${fName}${t.name}失败: ${res3.data.errmsg}`);
               console.error(`插入${fName}${t.name}失败: ${res3.data.errmsg}`);
               return false
-            }
-            if(rm != 'GET' && rm != 'POST'){
-              console.warn(`【${rm}】请求方式导入可能有问题`);
             }
             let interface_id = res3.data.data._id
             let req_query = []
