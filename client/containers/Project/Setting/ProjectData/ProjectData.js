@@ -299,7 +299,7 @@ class ProjectData extends Component {
     });
   };
 
-  formatDeep(key) {
+  formatDeepRes(key) {
     let res_body = {
       properties: {},
       required: [],
@@ -316,7 +316,7 @@ class ProjectData extends Component {
         if(type == 'object'){
           let len = decorate || '1'
           res_body.properties[identifier]={
-            items: this.formatDeep(rp.parameterList),
+            items: this.formatDeepRes(rp.parameterList),
             maxItems: len.split('-')[0],
             minItems: len.split('-')[1] || len.split('-')[0],
             type: "array"
@@ -373,7 +373,7 @@ class ProjectData extends Component {
         if(rp.parameterList.length === 0){
           res_body.properties[identifier] = ps
         } else {
-          res_body.properties[identifier] = this.formatDeep(rp.parameterList)
+          res_body.properties[identifier] = this.formatDeepRes(rp.parameterList)
         }
       }
     })
@@ -419,17 +419,22 @@ class ProjectData extends Component {
             } else {
               t.requestParameterList.forEach(rp => {
                 req_body_other.required.push(rp.identifier)
-                req_body_other.properties[rp.identifier] = {
-                  description: rp.name,
-                  mock: rp.remark ? {
-                    mock: rp.remark.replace('@mock=','').replace(/[\'\"]/g,'')
-                  } : undefined,
-                  type: rp.dataType
+
+                if(rp.parameterList.length === 0){
+                  req_body_other.properties[rp.identifier] = {
+                    description: rp.name,
+                    mock: rp.remark ? {
+                      mock: rp.remark.replace('@mock=','').replace(/[\'\"]/g,'')
+                    } : undefined,
+                    type: rp.dataType
+                  }
+                } else {
+                  req_body_other.properties[rp.identifier] = this.formatDeepRes(rp.parameterList)
                 }
               })
             }
 
-            let res_body = this.formatDeep(t.responseParameterList)
+            let res_body = this.formatDeepRes(t.responseParameterList)
 
             let upparams = Object.assign({
               api_opened: false,
