@@ -418,21 +418,6 @@ class ProjectData extends Component {
               })
             } else {
               req_body_other = this.formatDeepRes(t.requestParameterList)
-              // t.requestParameterList.forEach(rp => {
-              //   req_body_other.required.push(rp.identifier)
-
-              //   if(rp.parameterList.length === 0){
-              //     req_body_other.properties[rp.identifier] = {
-              //       description: rp.name,
-              //       mock: rp.remark ? {
-              //         mock: rp.remark.replace('@mock=','').replace(/[\'\"]/g,'')
-              //       } : undefined,
-              //       type: rp.dataType
-              //     }
-              //   } else {
-              //     req_body_other.properties[rp.identifier] = this.formatDeepRes(rp.parameterList)
-              //   }
-              // })
             }
 
             let res_body = this.formatDeepRes(t.responseParameterList)

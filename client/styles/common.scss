@@ -186,6 +186,9 @@ em {
   background-color: #d5ebfc;
 }
 
+.ant-menu-inline .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title{
+  width: auto!important;
+}
 
 
 // 页面级底部固定 需要添加padding以保证页面底部不被覆盖
