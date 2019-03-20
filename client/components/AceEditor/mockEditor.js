@@ -35,6 +35,7 @@ var langTools = ace.acequire('ace/ext/language_tools'),
     { name: '颜色hsl', mock: '@hsl' },
     { name: '整数', mock: '@integer' },
     { name: 'email', mock: '@email' },
+    { name: '自增', mock: '@increment' },
     { name: '大段文本', mock: '@paragraph' },
     { name: '句子', mock: '@sentence' },
     { name: '单词', mock: '@word' },
@@ -161,7 +162,7 @@ function run(options) {
       callback(
         null,
         wordList.map(function(ea) {
-          return { name: ea.mock, value: ea.mock, score: ea.mock, meta: ea.name };
+          return { name: ea.name, value: ea.mock, score: ea.mock, meta: ea.name };
         })
       );
     }

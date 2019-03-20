@@ -141,6 +141,7 @@ module.exports = {
     { name: '颜色hsl', mock: '@hsl' },
     { name: '整数', mock: '@integer' },
     { name: 'email', mock: '@email' },
+    { name: '自增', mock: '@increment' },
     { name: '大段文本', mock: '@paragraph' },
     { name: '句子', mock: '@sentence' },
     { name: '单词', mock: '@word' },
